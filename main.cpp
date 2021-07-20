@@ -80,7 +80,6 @@ void initField(Field & f)
     }
 }
 
-
 void deinitField (Field & f)
 {
     for (size_t i=0; i < f.SIZE; i++)
@@ -93,15 +92,16 @@ void deinitField (Field & f)
 
 void printField(const Field & f)
 {
-//    cout << "     ";
-//    for (size_t x = 0; x < f.SIZE; x++)
-//    {
-//        cout << x+1 << "   ";
-//        cout << endl;
-//    }
+    //displaying x coordinates
+    cout << "     ";
+    for (size_t x = 0; x < f.SIZE; x++)
+    {
+        cout << x+1 << "   ";
+    }
+    cout << endl;
     for (size_t y=0; y < f.SIZE; y++)
     {
-        cout << " " << y+1 << "  | ";
+        cout << " " << y+1 << " | ";
         for (size_t x = 0; x < f.SIZE; x++)
         {
         cout << (char)f.ppField[y][x] << " | ";
@@ -123,7 +123,6 @@ Coord getHumanCoord(Field & f)
     }while (c.x == 0 || c.y == 0 || c.x > 3 || c.y > 3 || f.ppField[c.y-1][c.x-1] != EMPTY);
     c.x--;
     c.y--;
-
     return c;
 }
 
@@ -165,7 +164,7 @@ Coord getAICoord(Field & f)
         }
     }
 
-
+    //AI first step
     if (f.ppField[1][1] == EMPTY)
     {
         return {1,1};
@@ -263,10 +262,11 @@ int main()
     clear();
     initField(f);
     printField(f);
+
     do{
         if (f.turn % 2 == 0)
         {
-            //chetnoe - hod cheloveka
+            //if even - first step is human
             Coord c = getHumanCoord(f);
             f.ppField[c.y][c.x] = f.human;
         }
@@ -280,6 +280,7 @@ int main()
         f.turn++;
         f.progress = getWon(f);
     } while (f.progress == IN_PROGRESS);
+
     if (f.progress == WON_HUMAN)
     {
         cout << "You won!";
@@ -290,8 +291,9 @@ int main()
     }
     if (f.progress == DRAW)
     {
-        cout << "DRAW!";
+        cout << "Draw!";
     }
+
     deinitField(f);
     return 0;
 }
