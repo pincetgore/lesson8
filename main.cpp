@@ -6,6 +6,8 @@
 
 using namespace std;
 
+
+
 enum Cell {
    CROSS = 'x',
     ZERO = 'o',
@@ -32,6 +34,8 @@ struct Field {
     Cell ai;
     Cell human;
 };
+
+Progress getWon(Field & f);
 
 void clear()
 {
@@ -125,6 +129,41 @@ Coord getHumanCoord(Field & f)
 
 Coord getAICoord(Field & f)
 {
+    //prewin situation
+    for (size_t y=0; y<f.SIZE; y++)
+    {
+        for (size_t x=0; x<f.SIZE; x++)
+        {
+            if (f.ppField[y][x] == EMPTY)
+            {
+                f.ppField[y][x]=f.ai;
+                if(getWon(f) == WON_AI)
+                {
+                    f.ppField[y][x] = EMPTY;
+                    return {y,x};
+                }
+                f.ppField[y][x] = EMPTY;
+            }
+        }
+    }
+
+    //prefail sitution
+    for (size_t y=0; y<f.SIZE; y++)
+    {
+        for (size_t x=0; x<f.SIZE; x++)
+        {
+            if (f.ppField[y][x] == EMPTY)
+            {
+                f.ppField[y][x]=f.human;
+                if(getWon(f) == WON_HUMAN)
+                {
+                    f.ppField[y][x] = EMPTY;
+                    return {y,x};
+                }
+                f.ppField[y][x] = EMPTY;
+            }
+        }
+    }
 
 
     if (f.ppField[1][1] == EMPTY)
@@ -132,7 +171,7 @@ Coord getAICoord(Field & f)
         return {1,1};
     }
 
-    //ugli
+    //corners
     if (f.ppField[0][0] == EMPTY)
         return {0,0};
     if (f.ppField[2][2] == EMPTY)
@@ -142,7 +181,7 @@ Coord getAICoord(Field & f)
     if (f.ppField[2][0] == EMPTY)
         return {2,0};
 
-    //ne ugli
+    //not corners
     if (f.ppField[0][1] == EMPTY)
         return {0,1};
     if (f.ppField[2][1] == EMPTY)
